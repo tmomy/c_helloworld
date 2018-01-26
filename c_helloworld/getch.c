@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <ctype.h>
 
+/*
+getint input to int
+ */
+
 #define BUFSIZE 100
 #define SIZE 10
 
