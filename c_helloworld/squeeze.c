@@ -1,6 +1,10 @@
 #include <stdio.h>
 #define MAXLINE 50
 
+/*
+find it that is same of s1 and s2
+ */
+
 void squeezes(char s1[], char s2[], char  s3[]);
 
 void squeezes(char s1[], char s2[], char s3[]) {
