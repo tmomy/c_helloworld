@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 int strend(char *s, char *t);
 
 int main(int argc, char const *argv[])
@@ -19,16 +18,14 @@ int main(int argc, char const *argv[])
 int strend(char *s, char *t) {
 	int i, j;
 	i = j = 0;
-	while (*s++){
+	while (*s){
 		i++;
-		// s++;
+		s++;
 	}
-	while(*t++){
+	while(*t){
 		j++;
-		// t++;	
+		t++;	
 	}
-	printf("%d\n",i );
-	printf("%d\n",j );
 	if(j<=i) {
 		while((*s-- == *t-- )&& j>=0){
 			printf("%s\n", s);
