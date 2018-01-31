@@ -1,69 +1,135 @@
+//
+//  main.c
+//  MasteringAlgorithms
+//  Illustrates using a linked list (see Chapter 5).
+//
+//  Created by YourtionGuo on 18/04/2017.
+//  Copyright © 2017 Yourtion. All rights reserved.
+//
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+
 #include "list.h"
 
-/*destroy*/
-
-void destroy(void *data) {
-	printf("in destroy%s\n",data );
-	free(data);
-	return;
-} 
-
-
-int main(int argc, char const *argv[])
+static void print_list(const List *list)
 {
-	ListElmt *t_element = NULL;
-	int i;
-	int resp;
-	int *data = NULL;
-
-	List t_list;
-	printf("init t_list:\n");
-	list_init(&t_list, destroy);
-	printf("create a list:\n");
-	for (int i = 0; i < 10; ++i)
-	{
-		data = (int *)malloc(sizeof(int));
-		if (data == NULL)
-			return -1;
-		*data = i;
-		list_ins_next(&t_list,NULL, (void *)data);
-	}
-	t_element = t_list.head;
-	for (i = 0; i < list_size(&t_list); ++i )
-		{	
-			printf("%d  ", *(int *)list_data(t_element) );
-			t_element = list_next(t_element);
-		}
-	printf("\n");	
-	t_element = t_list.head;
-	for (int i = 0; i < list_size(&t_list); ++i)
-	{
-		if ( *(int *)list_data(t_element) == 5 )
-			{
-				resp = list_rem_next(&t_list, t_element, (void **)&data);
-				if (resp == 0)
-				{
-					destroy(data);
-				}	
-			}
-		t_element = list_next(t_element);
-	printf("after remove the element: value = 4\n");
-    //traverse and print again
-    t_element = t_list.head;
-    for( i = 0; i <list_size(&t_list); i++ )
-    {
-        printf("%d ",  *(int *)list_data(t_element) );
-        t_element = list_next(t_element);
+  ListElmt           *element;
+  
+  int                *data, i;
+  
+  /// 显示链表
+  fprintf(stdout, "-> List size is %d\n", list_size(list));
+  
+  i = 0;
+  element = list_head(list);
+  
+  while (1) {
+    
+    data = list_data(element);
+    fprintf(stdout, "--> list[%03d]=%03d\n", i, *data);
+    
+    i++;
+    
+    if (list_is_tail(element)) {
+      break;
+    } else {
+      element = list_next(element);
     }
-    printf("\n\n");
+  }
+  
+  return;
+}
 
-    printf("here begin to destroy the list :\n");
-    //destroy the linked list
-    list_destroy(&t_list);
-
-	}
-	return 0;
+int main(int argc, const char * argv[])
+{
+  List               list;
+  ListElmt           *element;
+  
+  int                *data, i;
+  
+  /// 初始化链表
+  list_init(&list, free);
+  
+  /// 链表操作
+  
+  element = list_head(&list);
+  
+  for (i = 10; i > 0; i--) {
+    
+    if ((data = (int *)malloc(sizeof(int))) == NULL) return 1;
+    
+    *data = i;
+    
+    if (list_ins_next(&list, NULL, data) != 0) return 1;
+    
+  }
+  
+  print_list(&list);
+  
+  element = list_head(&list);
+  
+  for (i = 0; i < 7; i++) {
+    element = list_next(element);
+  }
+  
+  data = list_data(element);
+  fprintf(stdout, "Removing an element after the one containing %03d\n", *data);
+  
+  if (list_rem_next(&list, element, (void **)&data) != 0) return 1;
+  
+  print_list(&list);
+  
+  fprintf(stdout, "Inserting 011 at the tail of the list\n");
+  
+  *data = 11;
+  if (list_ins_next(&list, list_tail(&list), data) != 0) return 1;
+  
+  print_list(&list);
+  
+  fprintf(stdout, "Removing an element after the first element\n");
+  
+  element = list_head(&list);
+  if (list_rem_next(&list, element, (void **)&data) != 0) return 1;
+  
+  print_list(&list);
+  
+  fprintf(stdout, "Inserting 012 at the head of the list\n");
+  
+  *data = 12;
+  if (list_ins_next(&list, NULL, data) != 0) return 1;
+  
+  print_list(&list);
+  
+  fprintf(stdout, "Iterating and removing the fourth element\n");
+  
+  element = list_head(&list);
+  element = list_next(element);
+  element = list_next(element);
+  
+  if (list_rem_next(&list, element, (void **)&data) != 0) return 1;
+  
+  print_list(&list);
+  
+  fprintf(stdout, "Inserting 013 after the first element\n");
+  
+  *data = 13;
+  if (list_ins_next(&list, list_head(&list), data) != 0) return 1;
+  
+  print_list(&list);
+  
+  i = list_is_head(&list, list_head(&list));
+  fprintf(stdout, "Testing list_is_head...Value=%d (1=OK)\n", i);
+  i = list_is_head(&list, list_tail(&list));
+  fprintf(stdout, "Testing list_is_head...Value=%d (0=OK)\n", i);
+  i = list_is_tail(list_tail(&list));
+  fprintf(stdout, "Testing list_is_tail...Value=%d (1=OK)\n", i);
+  i = list_is_tail(list_head(&list));
+  fprintf(stdout, "Testing list_is_tail...Value=%d (0=OK)\n", i);
+  
+  /// 销毁链表
+  fprintf(stdout, "Destroying the list\n");
+  list_destroy(&list);
+  
+  return 0;
 }
