@@ -2,11 +2,11 @@
 #include <string.h>
 #include "list.h"
 
-void lsit_init(List *list, void (*destroy) (void *data)) {
-	list ->size = 0;
-	list ->destroy = destroy;
-	lsit ->head = NULL;
-	lsit ->tail = NULL;
+void list_init(List *list, void (*destroy) (void *data)) {
+	list->size = 0;
+	list->destroy = destroy;
+	list->head = NULL;
+	list->tail = NULL;
 	return;
 }
 
@@ -14,14 +14,14 @@ void list_destroy(List *list) {
 	void *data;
 	while (list_size(list) > 0) {
 		if (list_rem_next ( list, NULL, (void **) &data) == 0 && list ->destroy!=NULL) {
-			List -> destroy(data);
+			list-> destroy(data);
 		}
 	}
 	memset(list, 0, sizeof(List));
 	return;
 }
 
-int lsit_ins_next (List *list, ListElmt *element, const void *data) {
+int list_ins_next (List *list, ListElmt *element, const void *data) {
 	ListElmt *new_element;
 	if ((new_element = (ListElmt *) malloc(sizeof(ListElmt))) == NULL)
 		return -1;
@@ -37,17 +37,17 @@ int lsit_ins_next (List *list, ListElmt *element, const void *data) {
 		if (element->next = NULL) {
 			list -> tail = new_element;
 			new_element -> next = element -> next;
-			element -> new_element;
+			element -> next = new_element;
 		}
 	}
 	list -> size++;
 	return 0;
 }
 
-int list_rem_next(List *lsit, ListElmt *element, void **data) {
+int list_rem_next(List *list, ListElmt *element, void **data) {
 	ListElmt *old_element;
 	if (list_size(list) == 0)
-		return -1
+		return -1;
 	if (element == NULL)
 		{
 			*data = list->head->data;
@@ -59,7 +59,7 @@ int list_rem_next(List *lsit, ListElmt *element, void **data) {
 	else 
 		{
 			if (element->next == NULL)
-				return -1
+				return -1;
 			*data = element->next->data;
 			old_element = element->next;
 			element->next = element->next->next;
