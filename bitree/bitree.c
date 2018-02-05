@@ -80,3 +80,40 @@ void bitree_rem_left (BitTree *tree, BitTreeNode *node) {
     }
     return;
 }
+
+void bitree_rem_right(BitTree *tree, BitTreeNode *node) {
+    BitTreeNode **position;
+    if (bitree_size(tree) == 0)
+        return;
+    if (node == NULL)
+        position = &tree->root;
+    else
+        position = &node->right;
+    if (*position != NULL) {
+        bitree_rem_left(tree, *position);
+        bitree_rem_right(tree, *position);
+        if (tree->destroy != NULL) {
+            tree->destroy ((*position)->data);
+        }
+        free(*position);
+        *position = NULL;
+        tree->size--;
+    }
+    return;
+}
+
+int bitree_merge(BitTree *merge, BitTree *left, BitTree *right, const void *data) {
+    bitree_init(merge, left->destroy);
+    if (bitree_ins_left(merge, NULL, data) != 0) {
+        bitree_destroy(merge);
+        return -1;
+    }
+    bitree_root(merge)->left = bitree_root(left);
+    bitree_root(merge)->right = bitree_root(right);
+    merge->size = merge->size + left->size + right->size;
+    left->root = NULL;
+    left->size = 0;
+    right->root = NULL;
+    right->size = 0;
+    return 0;
+}

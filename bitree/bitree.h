@@ -28,11 +28,11 @@ void bitree_rem_left (BitTree *tree, BitTreeNode *node);
 void bitree_rem_right (BitTree *tree, BitTreeNode *node);
 int bitree_merge_ (BitTree *merge, BitTree *left, BitTree *right, const void *data);
 
-#define bitree_size (tree) ((tree)->size)
-#define bitree_root (tree) ((tree)->root)
-#define bitree_is_eob (node)    ((node)==NULL)
-#define bitree_is_leaf (node)   ((node)->left == NULL && (node)->right == NULL)
-#define bitree_data (node)  ((node)->data)
-#define bitree_left (node)  ((node)->left)
-#define bitree_right (node) ((node)->right)
+#define bitree_size(tree) ((tree)->size)
+#define bitree_root(tree) ((tree)->root)
+#define bitree_is_eob(node)    ((node)==NULL)
+#define bitree_is_leaf(node)   ((node)->left == NULL && (node)->right == NULL)
+#define bitree_data(node)  ((node)->data)
+#define bitree_left(node)  ((node)->left)
+#define bitree_right(node) ((node)->right)
 #endif //BITREE_BITREE_H
